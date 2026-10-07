@@ -1,0 +1,79 @@
+/*
+ * Kine Tours — "chalky etching" design tokens.
+ * Mirrors the tokens in the Paper file "minimal Tours" (Design Guide 01)
+ * plus the motion spec from "Motion — ink & fog" (Design Guide 02).
+ * Font families (--font-display, --font-body, --font-label) are defined by
+ * Astro's fonts API in astro.config.mjs.
+ */
+:root {
+	/* Neutrals — sampled from the etchings' skies */
+	--color-paper: #f8f6ee;
+	--color-graphite: #1a1c1c;
+	--color-fog: #d9d4c5;
+
+	/* One ink per place. Adding a place = add a token here + a file in src/content/places */
+	--color-ink-axum: #1e4e50;
+	--color-ink-lalibela: #4a2a2c;
+	--color-ink-lion: #0e2a5c;
+
+	/* Spacing */
+	--spacing-1: 4px;
+	--spacing-2: 8px;
+	--spacing-4: 16px;
+	--spacing-6: 24px;
+	--spacing-10: 40px;
+	--spacing-16: 64px;
+	--spacing-24: 96px;
+
+	/* Containers & breakpoints (breakpoints are reference values; CSS vars can't be used in media queries) */
+	--container-prose: 440px;
+	--container-page: 1440px;
+	--breakpoint-md: 768px;
+	--breakpoint-xl: 1440px;
+
+	/* Type scale — px at the 1440 design width; display scales down with the viewport */
+	--font-weight-regular: 400;
+	--font-weight-medium: 500;
+	--text-label: 12px;
+	--text-body: 16px;
+	--text-lead: 22px;
+	--text-headline: 64px;
+	--text-display: clamp(120px, 19.5vw, 280px); /* place names: 280px at 1440 */
+
+	--tracking-display: -0.035em;
+	--tracking-headline: -0.02em;
+	--tracking-label: 0.14em;
+
+	--leading-label: 16px;
+	--leading-body: 26px;
+	--leading-headline: 64px;
+	--leading-display: 0.82; /* 230 / 280 */
+
+	/* Shape & opacity */
+	--radius-none: 0px;
+	--radius-pill: 999px;
+	--opacity-muted: 64%;
+
+	/* Motion — ink & fog. Nothing snaps, bounces or pops. */
+	--motion-fast: 200ms; /* hover and press */
+	--motion-base: 400ms; /* colour shifts: nav ink, card image deepening */
+	--motion-slow: 800ms; /* text reveals rising 24px */
+	--motion-drift: 1600ms; /* fog lift: section image fade + un-blur */
+	--ease-ink: cubic-bezier(0.22, 1, 0.36, 1); /* everything that arrives */
+	--ease-fog: cubic-bezier(0.65, 0, 0.35, 1); /* two-way state changes */
+	--motion-travel: 24px; /* max distance anything moves */
+	--motion-nudge: 4px; /* arrow nudge on hover */
+	--parallax-rate: 0.85; /* images scroll at 85% of page speed */
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--motion-fast: 0ms;
+		--motion-base: 0ms;
+		--motion-slow: 0ms;
+		--motion-drift: 0ms;
+		--motion-travel: 0px;
+		--motion-nudge: 0px;
+		--parallax-rate: 1;
+	}
+}
