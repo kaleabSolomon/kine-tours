@@ -1,0 +1,115 @@
+---
+const principles = [
+	{
+		title: 'Six guests, never more',
+		body: "Small enough to slip into a priest's tunnel or a farmer's courtyard without turning it into a crowd.",
+	},
+	{
+		title: 'Guides who grew up there',
+		body: 'Every walk is led by someone from the town itself — they know which doors open, and who to ask.',
+	},
+	{
+		title: 'Out at first light',
+		body: 'We leave before the buses arrive and are drinking coffee by the time they do. Mornings belong to the places.',
+	},
+];
+---
+
+<section id="how" class="how" data-ink-section data-reveal-group aria-labelledby="how-title">
+	<div class="how__intro" data-reveal>
+		<p class="label">04 — How a walk works</p>
+		<h2 id="how-title" class="headline">Slow, small, and out before the crowds.</h2>
+	</div>
+	<ol class="how__list">
+		{
+			principles.map((p, i) => (
+				<li class="how__row" data-reveal style={`--delay: ${160 + i * 120}ms`}>
+					<span class="label how__num">{String(i + 1).padStart(2, '0')}</span>
+					<h3 class="how__title">{p.title}</h3>
+					<p class="how__body">{p.body}</p>
+				</li>
+			))
+		}
+	</ol>
+</section>
+
+<style>
+	.how {
+		--ink: var(--color-graphite);
+		display: flex;
+		gap: var(--spacing-24);
+		padding: var(--spacing-24) var(--gutter) 128px;
+	}
+	.how__intro {
+		width: 520px;
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-6);
+	}
+	.headline {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: var(--text-headline);
+		line-height: var(--leading-headline);
+		letter-spacing: var(--tracking-headline);
+	}
+	.how__list {
+		flex: 1;
+		list-style: none;
+		padding: 0;
+		border-top: 1px solid var(--color-fog);
+	}
+	.how__row {
+		display: flex;
+		align-items: baseline;
+		gap: var(--spacing-6);
+		padding: 32px 0;
+		border-bottom: 1px solid var(--color-fog);
+	}
+	.how__num {
+		width: 64px;
+		flex-shrink: 0;
+	}
+	.how__title {
+		width: 240px;
+		flex-shrink: 0;
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: 32px;
+		line-height: 36px;
+		letter-spacing: -0.01em;
+	}
+	.how__body {
+		flex: 1;
+	}
+
+	@media (max-width: 900px) {
+		.how {
+			flex-direction: column;
+			gap: var(--spacing-10);
+			padding: var(--spacing-16) var(--gutter) var(--spacing-24);
+		}
+		.how__intro {
+			width: auto;
+		}
+		.headline {
+			font-size: 44px;
+			line-height: 46px;
+		}
+		.how__row {
+			flex-wrap: wrap;
+			gap: var(--spacing-2) var(--spacing-4);
+		}
+		.how__num {
+			width: auto;
+		}
+		.how__title {
+			width: auto;
+			flex: 1;
+		}
+		.how__body {
+			flex-basis: 100%;
+		}
+	}
+</style>

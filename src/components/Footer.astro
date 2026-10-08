@@ -1,0 +1,137 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Button from './Button.astro';
+
+interface Props {
+	places: CollectionEntry<'places'>[];
+}
+
+const { places } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="footer" data-ink-section data-reveal-group>
+	<div class="footer__closing" data-reveal>
+		<p class="footer__line">See what the guidebooks missed.</p>
+		<Button href="#journeys">Book a walk</Button>
+	</div>
+
+	<div class="footer__columns" data-reveal style="--delay: 160ms">
+		<p class="footer__brand">Kine Tours</p>
+		<nav class="footer__col" aria-label="Places">
+			<p class="label">Places</p>
+			{
+				places.map((place) => (
+					<a href={`#${place.id}`} style={`color: var(--color-ink-${place.data.ink})`}>
+						{place.data.name}
+					</a>
+				))
+			}
+		</nav>
+		<nav class="footer__col" aria-label="Company">
+			<p class="label">Company</p>
+			<a href="#how">Our guides</a>
+			<a href="#">Field notes</a>
+			<a href="#">About</a>
+		</nav>
+		<div class="footer__col">
+			<p class="label">Contact</p>
+			<a href="mailto:hello@kinetours.et">hello@kinetours.et</a>
+			<a href="#">WhatsApp</a>
+			<a href="#">Instagram</a>
+		</div>
+	</div>
+
+	<div class="footer__legal label">
+		<span>© {year} Kine Tours</span>
+		<span>Walking from Addis Ababa · 9.03° N</span>
+	</div>
+</footer>
+
+<style>
+	.footer {
+		--ink: var(--color-graphite);
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-24);
+		padding: 128px var(--gutter) 48px;
+		border-top: 1px solid var(--color-fog);
+	}
+	.footer__closing {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: var(--spacing-16);
+	}
+	.footer__line {
+		max-width: 1000px;
+		font-family: var(--font-display);
+		font-size: 128px;
+		line-height: 120px;
+		letter-spacing: -0.03em;
+	}
+	.footer__columns {
+		display: flex;
+		gap: 32px;
+		padding-top: var(--spacing-10);
+		border-top: 1px solid var(--color-fog);
+	}
+	.footer__brand {
+		flex: 2;
+		font-family: var(--font-display);
+		font-size: 32px;
+		line-height: 36px;
+		letter-spacing: -0.01em;
+	}
+	.footer__col {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 12px;
+	}
+	.footer__col .label {
+		padding-bottom: var(--spacing-2);
+	}
+	.footer__col a {
+		text-decoration: underline;
+		text-decoration-color: transparent;
+		text-underline-offset: 4px;
+		text-decoration-thickness: 1px;
+		transition: text-decoration-color var(--motion-fast) var(--ease-fog);
+	}
+	.footer__col a:hover {
+		text-decoration-color: currentColor;
+	}
+	.footer__legal {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--spacing-4);
+	}
+
+	@media (max-width: 900px) {
+		.footer {
+			padding: var(--spacing-24) var(--gutter) var(--spacing-10);
+			gap: var(--spacing-16);
+		}
+		.footer__closing {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--spacing-10);
+		}
+		.footer__line {
+			font-size: 64px;
+			line-height: 62px;
+		}
+		.footer__columns {
+			flex-wrap: wrap;
+			gap: var(--spacing-10) var(--spacing-6);
+		}
+		.footer__brand {
+			flex-basis: 100%;
+		}
+		.footer__legal {
+			flex-direction: column;
+		}
+	}
+</style>

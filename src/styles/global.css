@@ -71,6 +71,23 @@ button {
 	text-transform: uppercase;
 }
 
+/*
+ * Text reveal: elements rise 24px and fade in when their section scrolls into view.
+ * Only hidden when JS is running (html.js), so the page is fully readable without it.
+ * Stagger with style="--delay: 120ms".
+ */
+.js [data-reveal] {
+	opacity: 0;
+	transform: translateY(var(--motion-travel));
+	transition:
+		opacity var(--motion-slow) var(--ease-ink) var(--delay, 0ms),
+		transform var(--motion-slow) var(--ease-ink) var(--delay, 0ms);
+}
+.js .is-in [data-reveal] {
+	opacity: 1;
+	transform: none;
+}
+
 .visually-hidden {
 	position: absolute;
 	width: 1px;

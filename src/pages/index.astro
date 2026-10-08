@@ -1,77 +1,36 @@
 ---
-// Temporary setup check — replaced by the real landing page in the next step.
 import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import PlaceSection from '../components/PlaceSection.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Journeys from '../components/Journeys.astro';
+import Footer from '../components/Footer.astro';
 
 const places = (await getCollection('places')).sort((a, b) => a.data.order - b.data.order);
-const journeys = await getCollection('journeys');
+
+// Each place's marker points to the next place; the last one leads into "How a walk works".
+const nextFor = (i: number) => {
+	const next = places[i + 1];
+	return next ? { label: `${next.data.name} next`, href: `#${next.id}` } : { label: 'How a walk works', href: '#how' };
+};
 ---
 
 <Base>
-	<main class="check">
-		<p class="label">Setup check · {places.length} places · {journeys.length} journeys</p>
-		<h1>Kine Tours</h1>
-		<ul>
-			{
-				places.map((place) => (
-					<li style={`--ink: var(--color-ink-${place.data.ink})`}>
-						<Image src={place.data.image} alt={place.data.imageAlt} width={480} />
-						<p class="label">{place.data.coordinates}</p>
-						<h2>{place.data.title}</h2>
-						<p class="kicker">{place.data.kicker}</p>
-					</li>
-				))
-			}
-		</ul>
+	<Nav firstPlaceId={places[0].id} />
+	<main id="top">
+		<h1 class="visually-hidden">Kine Tours — small, slow walks through the unseen Ethiopia</h1>
+		{
+			places.map((place, i) => (
+				<PlaceSection place={place} index={i + 1} total={places.length} next={nextFor(i)} />
+			))
+		}
+		<HowItWorks />
+		<Journeys />
 	</main>
+	<Footer places={places} />
 </Base>
 
-<style>
-	.check {
-		max-width: var(--container-page);
-		margin-inline: auto;
-		padding: var(--spacing-24) var(--spacing-16);
-		display: flex;
-		flex-direction: column;
-		gap: var(--spacing-10);
-	}
-	h1 {
-		font-family: var(--font-display);
-		font-weight: 400;
-		font-size: var(--text-display);
-		line-height: var(--leading-display);
-		letter-spacing: var(--tracking-display);
-	}
-	ul {
-		list-style: none;
-		padding: 0;
-		display: flex;
-		gap: var(--spacing-6);
-	}
-	li {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		gap: var(--spacing-2);
-		color: var(--ink);
-	}
-	li img {
-		width: 100%;
-		height: 200px;
-		object-fit: cover;
-		object-position: center 80%;
-	}
-	h2 {
-		font-family: var(--font-display);
-		font-weight: 400;
-		font-size: var(--text-headline);
-		line-height: var(--leading-headline);
-		letter-spacing: var(--tracking-headline);
-	}
-	.kicker {
-		font-family: var(--font-display);
-		font-style: italic;
-		font-size: var(--text-lead);
-	}
-</style>
+<script>
+	import '../scripts/motion';
+</script>

@@ -1,0 +1,251 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import { Picture } from 'astro:assets';
+import Button from './Button.astro';
+
+interface Props {
+	place: CollectionEntry<'places'>;
+	index: number; // 1-based
+	total: number;
+	next: { label: string; href: string };
+}
+
+const { place, index, total, next } = Astro.props;
+const { data } = place;
+const { Content } = await render(place);
+
+const isFirst = index === 1;
+const pad = (n: number) => String(n).padStart(2, '0');
+// Never request widths larger than the source image.
+const widths = [640, 960, 1280, 1600, 1920, 2560].filter((w) => w < data.image.width).concat(data.image.width);
+---
+
+<section
+	id={place.id}
+	class:list={['place', `place--${data.titleSide}`, { 'place--first': isFirst }]}
+	style={`--ink: var(--color-ink-${data.ink}); --image-position: ${data.imagePosition};`}
+	data-ink-section
+	data-reveal-group
+	aria-labelledby={`${place.id}-title`}
+>
+	<div class="place__media" data-parallax>
+		<Picture
+			src={data.image}
+			alt={data.imageAlt}
+			formats={['avif', 'webp']}
+			fallbackFormat="webp"
+			widths={widths}
+			sizes="100vw"
+			loading={isFirst ? 'eager' : 'lazy'}
+			fetchpriority={isFirst ? 'high' : 'auto'}
+		/>
+	</div>
+	{!isFirst && <div class="place__fade place__fade--top" aria-hidden="true" />}
+	<div class="place__fade place__fade--bottom" aria-hidden="true" />
+
+	<div class="place__top">
+		<div class="place__title-row">
+			<h2 id={`${place.id}-title`} class="place__title" data-reveal style="--delay: 120ms">
+				<span class="visually-hidden">{data.name} — </span>{data.title}
+			</h2>
+			<div class="place__meta" data-reveal style="--delay: 320ms">
+				<p class="label">{data.coordinates}</p>
+				<p class="place__kicker">{data.kicker}</p>
+			</div>
+		</div>
+		<div class="place__intro" data-reveal style="--delay: 480ms">
+			<Content />
+		</div>
+	</div>
+
+	<div class="place__bottom" data-reveal style="--delay: 640ms">
+		<a class="marker" href={next.href}>
+			<span class="label">{pad(index)} / {pad(total)}</span>
+			<span class="marker__line" aria-hidden="true"></span>
+			<span class="marker__next">{next.label}</span>
+		</a>
+		<div class="place__actions">
+			<Button href="#journeys" variant="secondary" arrow={false}>Journey dates</Button>
+			<Button href="#journeys">{data.cta}</Button>
+		</div>
+	</div>
+</section>
+
+<style>
+	.place {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		min-height: max(100svh, 760px);
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: var(--spacing-10);
+		padding: var(--spacing-24) var(--gutter) 56px;
+		color: var(--ink);
+		background: var(--color-paper);
+	}
+	.place--first {
+		padding-top: 136px; /* clears the fixed nav */
+	}
+
+	/* ---- Etching + fog ---- */
+	.place__media {
+		position: absolute;
+		inset: -6% 0;
+		z-index: -2;
+		will-change: transform;
+	}
+	.place__media :global(picture),
+	.place__media :global(img) {
+		width: 100%;
+		height: 100%;
+	}
+	.place__media :global(img) {
+		object-fit: cover;
+		object-position: var(--image-position);
+	}
+
+	.place__fade {
+		position: absolute;
+		inset-inline: 0;
+		z-index: -1;
+		pointer-events: none;
+	}
+	.place__fade--top {
+		top: 0;
+		height: 200px;
+		background: linear-gradient(to bottom, var(--color-paper) 0%, rgb(248 246 238 / 0) 100%);
+	}
+	.place__fade--bottom {
+		bottom: 0;
+		height: min(40%, 360px);
+		background: linear-gradient(
+			to bottom,
+			rgb(248 246 238 / 0) 0%,
+			rgb(248 246 238 / 0.85) 70%,
+			var(--color-paper) 100%
+		);
+	}
+
+	/* ---- Title in the sky ---- */
+	.place__top {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-2);
+	}
+	/* Meta (coordinates + kicker) sits above the title, both hugging the section's own edge. */
+	.place__title-row {
+		display: flex;
+		flex-direction: column-reverse;
+		align-items: flex-start;
+		gap: var(--spacing-4);
+	}
+	.place--right .place__title-row {
+		align-items: flex-end;
+	}
+	.place__title {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: var(--text-display);
+		line-height: var(--leading-display);
+		letter-spacing: var(--tracking-display);
+		white-space: nowrap;
+	}
+	.place__meta {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-2);
+	}
+	.place--right .place__meta {
+		align-items: flex-end;
+		text-align: right;
+	}
+	.place__kicker {
+		font-family: var(--font-display);
+		font-style: italic;
+		font-size: var(--text-lead);
+		line-height: 28px;
+	}
+	.place__intro {
+		width: 380px;
+		max-width: 100%;
+		padding-top: var(--spacing-10);
+		color: var(--color-graphite);
+	}
+	.place--right .place__intro {
+		align-self: flex-end;
+	}
+
+	/* ---- Bottom row: marker + actions (mirrored for left-titled places) ---- */
+	.place__bottom {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: var(--spacing-6);
+	}
+	.place__actions {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+	.place--left .place__bottom,
+	.place--left .place__actions,
+	.place--left .marker {
+		flex-direction: row-reverse;
+	}
+
+	.marker {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-4);
+	}
+	.marker__line {
+		width: 96px;
+		height: 1px;
+		background: currentColor;
+		transition: width var(--motion-base) var(--ease-ink);
+	}
+	.marker:hover .marker__line {
+		width: 128px;
+	}
+	.marker__next {
+		font-family: var(--font-display);
+		font-style: italic;
+		font-size: 22px;
+		line-height: 24px;
+	}
+
+	/* ---- Fog lift (only when JS can reveal it again) ---- */
+	:global(.js) .place__media :global(img) {
+		opacity: 0;
+		filter: blur(8px);
+		transition:
+			opacity var(--motion-drift) var(--ease-ink),
+			filter var(--motion-drift) var(--ease-ink);
+	}
+	:global(.js) .place.is-in .place__media :global(img) {
+		opacity: 1;
+		filter: none;
+	}
+
+	@media (max-width: 900px) {
+		.place {
+			padding: 96px var(--gutter) var(--spacing-10);
+		}
+		.place__bottom,
+		.place--left .place__bottom {
+			flex-direction: column-reverse;
+			align-items: stretch;
+		}
+		.place__actions,
+		.place--left .place__actions {
+			flex-direction: column-reverse;
+			align-items: stretch;
+		}
+		.place__actions :global(.btn) {
+			justify-content: center;
+		}
+	}
+</style>

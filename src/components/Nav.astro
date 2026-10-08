@@ -1,0 +1,88 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+	firstPlaceId: string;
+}
+
+const { firstPlaceId } = Astro.props;
+---
+
+<header class="nav" data-nav>
+	<a href="#top" class="nav__brand">Kine Tours</a>
+	<nav aria-label="Main">
+		<ul class="nav__links">
+			<li><a class="label nav__link" href={`#${firstPlaceId}`}>Places</a></li>
+			<li><a class="label nav__link" href="#journeys">Journeys</a></li>
+			<li><a class="label nav__link" href="#how">Guides</a></li>
+			<li><Button href="#journeys" variant="secondary" arrow={false}>Book a walk</Button></li>
+		</ul>
+	</nav>
+</header>
+
+<style>
+	/* --ink is set by src/scripts/motion.ts to match the section underneath. */
+	.nav {
+		--ink: var(--color-ink-axum);
+		position: fixed;
+		inset: 0 0 auto 0;
+		z-index: 10;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 40px var(--gutter) 0;
+		color: var(--ink);
+		transition:
+			color var(--motion-base) var(--ease-fog),
+			padding var(--motion-base) var(--ease-fog),
+			background-color var(--motion-base) var(--ease-fog),
+			box-shadow var(--motion-base) var(--ease-fog);
+	}
+
+	/* Once the page has scrolled, a thin paper veil keeps the nav legible over imagery. */
+	.nav.is-scrolled {
+		padding-block: 16px;
+		background-color: color-mix(in srgb, var(--color-paper) 84%, transparent);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		box-shadow: 0 1px 0 color-mix(in srgb, var(--color-fog) 70%, transparent);
+	}
+
+	.nav__brand {
+		font-family: var(--font-display);
+		font-size: 26px;
+		line-height: 26px;
+		letter-spacing: -0.01em;
+	}
+
+	.nav__links {
+		list-style: none;
+		padding: 0;
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-10);
+	}
+
+	.nav__link {
+		text-decoration: underline;
+		text-decoration-color: transparent;
+		text-underline-offset: 6px;
+		text-decoration-thickness: 1px;
+		transition: text-decoration-color var(--motion-fast) var(--ease-fog);
+	}
+	.nav__link:hover {
+		text-decoration-color: currentColor;
+	}
+
+	@media (max-width: 900px) {
+		.nav {
+			padding: 20px var(--gutter) 0;
+		}
+		.nav.is-scrolled {
+			padding-block: 12px;
+		}
+		.nav__links li:not(:last-child) {
+			display: none;
+		}
+	}
+</style>

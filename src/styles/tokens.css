@@ -31,6 +31,9 @@
 	--breakpoint-md: 768px;
 	--breakpoint-xl: 1440px;
 
+	/* Page gutter: 64px, growing so content stays within the 1440 page on wider screens */
+	--gutter: max(var(--spacing-16), calc((100vw - var(--container-page)) / 2 + var(--spacing-16)));
+
 	/* Type scale — px at the 1440 design width; display scales down with the viewport */
 	--font-weight-regular: 400;
 	--font-weight-medium: 500;
@@ -38,7 +41,7 @@
 	--text-body: 16px;
 	--text-lead: 22px;
 	--text-headline: 64px;
-	--text-display: clamp(120px, 19.5vw, 280px); /* place names: 280px at 1440 */
+	--text-display: clamp(64px, 13.33vw, 192px); /* place names: 192px at 1440 */
 
 	--tracking-display: -0.035em;
 	--tracking-headline: -0.02em;
@@ -47,7 +50,7 @@
 	--leading-label: 16px;
 	--leading-body: 26px;
 	--leading-headline: 64px;
-	--leading-display: 0.82; /* 230 / 280 */
+	--leading-display: 0.84;
 
 	/* Shape & opacity */
 	--radius-none: 0px;
@@ -64,6 +67,12 @@
 	--motion-travel: 24px; /* max distance anything moves */
 	--motion-nudge: 4px; /* arrow nudge on hover */
 	--parallax-rate: 0.85; /* images scroll at 85% of page speed */
+}
+
+@media (max-width: 900px) {
+	:root {
+		--gutter: var(--spacing-6);
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {

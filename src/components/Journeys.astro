@@ -1,0 +1,193 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import { Picture } from 'astro:assets';
+import Button from './Button.astro';
+import Arrow from './Arrow.astro';
+
+const journeys = (await getCollection('journeys')).sort((a, b) => a.data.order - b.data.order);
+
+const cards = await Promise.all(
+	journeys.map(async (journey) => {
+		const place = await getEntry(journey.data.place);
+		const { Content } = await render(journey);
+		return { journey, ink: place.data.ink, Content };
+	}),
+);
+
+const price = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+---
+
+<section id="journeys" class="journeys" data-ink-section data-reveal-group aria-labelledby="journeys-title">
+	<div class="journeys__heading" data-reveal>
+		<div class="journeys__titles">
+			<p class="label">05 — Upcoming journeys</p>
+			<h2 id="journeys-title" class="headline">Three walks this season.</h2>
+		</div>
+		<Button href="#journeys" variant="secondary" arrow={false}>All journeys</Button>
+	</div>
+
+	<ul class="journeys__list">
+		{
+			cards.map(({ journey, ink, Content }, i) => (
+				<li class="journey" style={`--ink: var(--color-ink-${ink}); --delay: ${160 + i * 120}ms;`} data-reveal>
+					<div class="journey__image">
+						<Picture
+							src={journey.data.image}
+							alt={journey.data.imageAlt}
+							formats={['avif', 'webp']}
+							fallbackFormat="webp"
+							widths={[480, 960]}
+							sizes="(max-width: 900px) 100vw, 420px"
+							style={`object-position: ${journey.data.imagePosition}`}
+						/>
+					</div>
+					<div class="journey__facts label">
+						<span>{journey.data.dates}</span>
+						<span>{journey.data.length}</span>
+					</div>
+					<div class="journey__text">
+						<h3 class="journey__title">{journey.data.title}</h3>
+						<div class="journey__body">
+							<Content />
+						</div>
+					</div>
+					<div class="journey__foot">
+						<span>From {price.format(journey.data.priceFrom)}</span>
+						<a class="journey__reserve label" href="#journeys">
+							Reserve
+							<span class="visually-hidden"> {journey.data.title}</span>
+							<Arrow />
+						</a>
+					</div>
+				</li>
+			))
+		}
+	</ul>
+</section>
+
+<style>
+	.journeys {
+		--ink: var(--color-graphite);
+		display: flex;
+		flex-direction: column;
+		gap: 56px;
+		padding: var(--spacing-24) var(--gutter) 128px;
+		border-top: 1px solid var(--color-fog);
+	}
+	.journeys__heading {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: var(--spacing-6);
+	}
+	.journeys__titles {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-6);
+	}
+	.headline {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: var(--text-headline);
+		line-height: var(--leading-headline);
+		letter-spacing: var(--tracking-headline);
+	}
+	.journeys__list {
+		list-style: none;
+		padding: 0;
+		display: flex;
+		gap: 32px;
+	}
+
+	.journey {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-6);
+	}
+	.journey__image {
+		height: 300px;
+		overflow: hidden;
+	}
+	.journey__image :global(picture),
+	.journey__image :global(img) {
+		width: 100%;
+		height: 100%;
+	}
+	.journey__image :global(img) {
+		object-fit: cover;
+		transition: filter var(--motion-base) var(--ease-fog);
+	}
+	/* Hover: the etching gets a second pass of ink. */
+	.journey:hover .journey__image :global(img) {
+		filter: contrast(1.08) brightness(0.94);
+	}
+
+	.journey__facts {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--spacing-4);
+		color: var(--ink);
+	}
+	.journey__text {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+	.journey__title {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: 36px;
+		line-height: 40px;
+		letter-spacing: -0.01em;
+		color: var(--ink);
+	}
+	.journey__foot {
+		margin-top: auto;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding-top: var(--spacing-4);
+		border-top: 1px solid var(--color-fog);
+	}
+	.journey__reserve {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-2);
+		color: var(--ink);
+		text-decoration: underline;
+		text-decoration-color: transparent;
+		text-underline-offset: 6px;
+		text-decoration-thickness: 1px;
+		transition: text-decoration-color var(--motion-fast) var(--ease-fog);
+	}
+	.journey:hover .journey__reserve {
+		text-decoration-color: currentColor;
+	}
+	.journey:hover .journey__reserve :global(.arrow) {
+		transform: translateX(var(--motion-nudge));
+	}
+
+	@media (max-width: 900px) {
+		.journeys {
+			padding: var(--spacing-16) var(--gutter) var(--spacing-24);
+			gap: var(--spacing-10);
+		}
+		.journeys__heading {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+		.headline {
+			font-size: 44px;
+			line-height: 46px;
+		}
+		.journeys__list {
+			flex-direction: column;
+			gap: var(--spacing-16);
+		}
+		.journey__image {
+			height: 240px;
+		}
+	}
+</style>

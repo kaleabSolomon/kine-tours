@@ -1,0 +1,64 @@
+---
+import Arrow from './Arrow.astro';
+
+interface Props {
+	href: string;
+	variant?: 'primary' | 'secondary';
+	arrow?: boolean;
+	class?: string;
+}
+
+const { href, variant = 'primary', arrow = variant === 'primary', class: className } = Astro.props;
+---
+
+<a href={href} class:list={['btn', `btn--${variant}`, 'label', className]}>
+	<span><slot /></span>
+	{arrow && <Arrow />}
+</a>
+
+<style>
+	/* Colour comes from --ink on the nearest section (falls back to graphite). */
+	.btn {
+		--btn-ink: var(--ink, var(--color-graphite));
+		display: inline-flex;
+		align-items: center;
+		gap: 12px;
+		padding: 14px 24px;
+		border: 1px solid var(--btn-ink);
+		border-radius: var(--radius-pill);
+		white-space: nowrap;
+		transition:
+			background-color var(--motion-fast) var(--ease-fog),
+			color var(--motion-fast) var(--ease-fog),
+			border-color var(--motion-base) var(--ease-fog),
+			transform var(--motion-fast) var(--ease-fog);
+	}
+
+	/* Primary: solid ink pill. Hover lightens a touch and nudges the arrow. */
+	.btn--primary {
+		background: var(--btn-ink);
+		color: var(--color-paper);
+	}
+	.btn--primary:hover {
+		background: color-mix(in srgb, var(--btn-ink) 86%, var(--color-paper));
+	}
+
+	/* Secondary: outlined pill. Hover floods it with ink. */
+	.btn--secondary {
+		background: transparent;
+		color: var(--btn-ink);
+	}
+	.btn--secondary:hover {
+		background: var(--btn-ink);
+		color: var(--color-paper);
+	}
+
+	.btn:hover :global(.arrow) {
+		transform: translateX(var(--motion-nudge));
+	}
+
+	/* Press settles 1px down. */
+	.btn:active {
+		transform: translateY(1px);
+	}
+</style>

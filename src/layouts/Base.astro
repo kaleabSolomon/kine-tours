@@ -23,6 +23,9 @@ const {
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<script is:inline>
+			document.documentElement.classList.add('js');
+		</script>
 		<Font cssVariable="--font-display" preload />
 		<Font cssVariable="--font-body" preload />
 		<Font cssVariable="--font-label" />
