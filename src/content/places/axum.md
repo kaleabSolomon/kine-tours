@@ -13,4 +13,4 @@ imagePosition: center bottom
 cta: See the unseen Axum
 ---
 
-Everyone photographs the great stele. We walk you past it at first light — into the tombs of forgotten kings, the farmers' paths and the stones the tour buses skip.
+Everyone photographs the great stele. We walk you past it at first light, into the tombs of forgotten kings and along the farmers' paths the tour buses skip.

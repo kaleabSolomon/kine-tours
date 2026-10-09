@@ -3,6 +3,8 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
+	// Keep straight quotes and apostrophes as written in the content files.
+	markdown: { smartypants: false },
 	fonts: [
 		{
 			provider: fontProviders.google(),

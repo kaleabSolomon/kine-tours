@@ -19,7 +19,7 @@ const nextFor = (i: number) => {
 <Base>
 	<Nav firstPlaceId={places[0].id} />
 	<main id="top">
-		<h1 class="visually-hidden">Kine Tours — small, slow walks through the unseen Ethiopia</h1>
+		<h1 class="visually-hidden">Kine Tours. Small, slow walks through the parts of Ethiopia the tour buses skip.</h1>
 		{
 			places.map((place, i) => (
 				<PlaceSection place={place} index={i + 1} total={places.length} next={nextFor(i)} />

@@ -10,7 +10,7 @@ const { places } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer" data-ink-section data-reveal-group>
+<footer class="footer quiet-reveal" data-ink-section data-reveal-group>
 	<div class="footer__closing" data-reveal>
 		<p class="footer__line">See what the guidebooks missed.</p>
 		<Button href="#journeys">Book a walk</Button>
@@ -94,6 +94,8 @@ const year = new Date().getFullYear();
 		padding-bottom: var(--spacing-2);
 	}
 	.footer__col a {
+		padding-block: 9px; /* 44px tap target, offset so the column rhythm stays */
+		margin-block: -9px;
 		text-decoration: underline;
 		text-decoration-color: transparent;
 		text-underline-offset: 4px;

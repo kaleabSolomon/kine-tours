@@ -47,7 +47,7 @@ const widths = [640, 960, 1280, 1600, 1920, 2560].filter((w) => w < data.image.w
 	<div class="place__top">
 		<div class="place__title-row">
 			<h2 id={`${place.id}-title`} class="place__title" data-reveal style="--delay: 120ms">
-				<span class="visually-hidden">{data.name} — </span>{data.title}
+				<span class="visually-hidden">{data.name}</span><span aria-hidden="true">{data.title}</span>
 			</h2>
 			<div class="place__meta" data-reveal style="--delay: 320ms">
 				<p class="label">{data.coordinates}</p>
@@ -197,6 +197,8 @@ const widths = [640, 960, 1280, 1600, 1920, 2560].filter((w) => w < data.image.w
 	}
 
 	.marker {
+		padding-block: 10px; /* 44px tap target without shifting the row */
+		margin-block: -10px;
 		display: flex;
 		align-items: center;
 		gap: var(--spacing-4);

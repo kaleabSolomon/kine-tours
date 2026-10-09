@@ -17,10 +17,9 @@ const cards = await Promise.all(
 const price = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 ---
 
-<section id="journeys" class="journeys" data-ink-section data-reveal-group aria-labelledby="journeys-title">
+<section id="journeys" class="journeys quiet-reveal" data-ink-section data-reveal-group aria-labelledby="journeys-title">
 	<div class="journeys__heading" data-reveal>
 		<div class="journeys__titles">
-			<p class="label">05 — Upcoming journeys</p>
 			<h2 id="journeys-title" class="headline">Three walks this season.</h2>
 		</div>
 		<Button href="#journeys" variant="secondary" arrow={false}>All journeys</Button>
@@ -153,6 +152,8 @@ const price = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD
 	}
 	.journey__reserve {
 		display: inline-flex;
+		padding-block: 14px; /* 44px tap target without shifting the row */
+		margin-block: -14px;
 		align-items: center;
 		gap: var(--spacing-2);
 		color: var(--ink);

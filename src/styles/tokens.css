@@ -13,8 +13,8 @@
 
 	/* One ink per place. Adding a place = add a token here + a file in src/content/places */
 	--color-ink-axum: #1e4e50;
-	--color-ink-lalibela: #4a2a2c;
-	--color-ink-lion: #0e2a5c;
+	--color-ink-lalibela: #0e2a5c; /* indigo, sampled from the Lalibela etching */
+	--color-ink-lion: #4a2a2c; /* rose-brown, sampled from the Lion of Judah etching */
 
 	/* Spacing */
 	--spacing-1: 4px;

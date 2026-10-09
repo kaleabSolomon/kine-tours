@@ -13,6 +13,8 @@
 html {
 	scroll-behavior: smooth;
 	-webkit-text-size-adjust: 100%;
+	scrollbar-color: var(--color-fog) var(--color-paper);
+	accent-color: var(--color-graphite);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -42,6 +44,17 @@ svg {
 a {
 	color: inherit;
 	text-decoration: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3 {
+	text-wrap: balance;
+}
+
+p {
+	text-wrap: pretty;
 }
 
 button {
@@ -62,23 +75,24 @@ button {
 	outline-offset: 4px;
 }
 
-/* Small uppercase mono labels: nav, coordinates, section numbers */
+/* Small uppercase mono labels: nav, coordinates, dates, place counter */
 .label {
 	font-family: var(--font-label);
 	font-size: var(--text-label);
 	line-height: var(--leading-label);
 	letter-spacing: var(--tracking-label);
 	text-transform: uppercase;
+	font-variant-numeric: tabular-nums;
 }
 
 /*
- * Text reveal: elements rise 24px and fade in when their section scrolls into view.
+ * Text reveal: elements rise 24px (12px in .quiet-reveal sections) and fade in when their section scrolls into view.
  * Only hidden when JS is running (html.js), so the page is fully readable without it.
  * Stagger with style="--delay: 120ms".
  */
 .js [data-reveal] {
 	opacity: 0;
-	transform: translateY(var(--motion-travel));
+	transform: translateY(var(--reveal-travel, var(--motion-travel)));
 	transition:
 		opacity var(--motion-slow) var(--ease-ink) var(--delay, 0ms),
 		transform var(--motion-slow) var(--ease-ink) var(--delay, 0ms);
@@ -86,6 +100,11 @@ button {
 .js .is-in [data-reveal] {
 	opacity: 1;
 	transform: none;
+}
+
+/* Paper sections arrive more quietly so the fog lift on the places stays the signature moment. */
+.quiet-reveal {
+	--reveal-travel: calc(var(--motion-travel) / 2);
 }
 
 .visually-hidden {

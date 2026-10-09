@@ -6,31 +6,29 @@ const principles = [
 	},
 	{
 		title: 'Guides who grew up there',
-		body: 'Every walk is led by someone from the town itself — they know which doors open, and who to ask.',
+		body: 'Someone from the town itself leads every walk. They know which doors open and who to ask.',
 	},
 	{
 		title: 'Out at first light',
-		body: 'We leave before the buses arrive and are drinking coffee by the time they do. Mornings belong to the places.',
+		body: 'We leave before the buses arrive and are drinking coffee by the time they do.',
 	},
 ];
 ---
 
-<section id="how" class="how" data-ink-section data-reveal-group aria-labelledby="how-title">
+<section id="how" class="how quiet-reveal" data-ink-section data-reveal-group aria-labelledby="how-title">
 	<div class="how__intro" data-reveal>
-		<p class="label">04 — How a walk works</p>
-		<h2 id="how-title" class="headline">Slow, small, and out before the crowds.</h2>
+		<h2 id="how-title" class="headline">Slow, small and out before the crowds.</h2>
 	</div>
-	<ol class="how__list">
+	<ul class="how__list">
 		{
 			principles.map((p, i) => (
 				<li class="how__row" data-reveal style={`--delay: ${160 + i * 120}ms`}>
-					<span class="label how__num">{String(i + 1).padStart(2, '0')}</span>
 					<h3 class="how__title">{p.title}</h3>
 					<p class="how__body">{p.body}</p>
 				</li>
 			))
 		}
-	</ol>
+	</ul>
 </section>
 
 <style>
@@ -67,10 +65,6 @@ const principles = [
 		padding: 32px 0;
 		border-bottom: 1px solid var(--color-fog);
 	}
-	.how__num {
-		width: 64px;
-		flex-shrink: 0;
-	}
 	.how__title {
 		width: 240px;
 		flex-shrink: 0;
@@ -100,9 +94,6 @@ const principles = [
 		.how__row {
 			flex-wrap: wrap;
 			gap: var(--spacing-2) var(--spacing-4);
-		}
-		.how__num {
-			width: auto;
 		}
 		.how__title {
 			width: auto;
